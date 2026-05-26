@@ -1011,6 +1011,8 @@ function toast(msg){
 
 // ── CHECKOUT ──
 function goToCheckout() {
+  var stripeLinks = {"Coeur Blanc":"https://buy.stripe.com/28E9AS57u01x9lw0c4eQM05","Rosa Vento":"https://buy.stripe.com/8x27sK6by5lRbtE6AseQM04","In Senso":"https://buy.stripe.com/fZu8wO7fCaGb1T4f6YeQM03","Bianco Latte":"https://buy.stripe.com/28EcN4bvS01x41cbUMeQM02","Coeur Blanc + Rosa Vento":"https://buy.stripe.com/8x2aEW9nK6pVbtE5woeQM01","Rosa Vento + Coeur Blanc":"https://buy.stripe.com/8x2aEW9nK6pVbtE5woeQM01","Vanilla Powder":"https://buy.stripe.com/3cIcN40Re8y3cxI2kceQM00"};
+  products.forEach(function(p){ if (!p.stripeLink && stripeLinks[p.name]) p.stripeLink = stripeLinks[p.name]; });
   if (!cart.length) { toast("Votre panier est vide"); return; }
   closeCart();
   // Si un seul produit → direct vers Stripe
