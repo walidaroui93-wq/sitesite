@@ -1044,18 +1044,23 @@ function renderMultiCheckout() {
   document.getElementById('mco-total').textContent = total + ' €';
   const existing = document.getElementById('mco-pay-all-btn');
   if(existing) existing.remove();
-  const btn = document.createElement('button');
-  btn.id = 'mco-pay-all-btn';
-  btn.className = 'btn-checkout';
-  btn.style.marginTop = '24px';
-  btn.textContent = 'Payer ' + total + ' \u20AC \u2192';
-  btn.onclick = () => {
-    cart.forEach((item, i) => {
-      const p = products.find(x => x.id === item.id);
-      if(p && p.stripeLink) setTimeout(() => window.open(p.stripeLink,'_blank'), i * 800);
-    });
-  };
-  document.getElementById('mco-total').parentNode.appendChild(btn);
+  const container = document.getElementById('mco-total').parentNode;
+  container.querySelectorAll('.mco-pay-btn').forEach(b => b.remove());
+  cart.forEach((item) => {
+    const p = products.find(x => x.id === item.id);
+    if (p && p.stripeLink) {
+      const btn = document.createElement('a');
+      btn.href = p.stripeLink;
+      btn.target = '_blank';
+      btn.className = 'btn-checkout mco-pay-btn';
+      btn.style.display = 'block';
+      btn.style.marginTop = '12px';
+      btn.style.textAlign = 'center';
+      btn.style.textDecoration = 'none';
+      btn.textContent = 'Payer ' + p.name + (p.price ? ' — ' + p.price + ' €' : '') + ' →';
+      container.appendChild(btn);
+    }
+  });
 }
 
 function renderCheckout() {
