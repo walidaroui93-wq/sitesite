@@ -1058,7 +1058,7 @@ function renderMultiCheckout() {
     const p = products.find(x => x.id === item.id);
     if (p && p.stripeLink) {
       const btn = document.createElement('a');
-      btn.href = p.stripeLink;
+      btn.href = p.stripeLink + (item.qty > 1 ? "?prefilled_quantity=" + item.qty : "");
       btn.target = '_blank';
       btn.className = 'btn-checkout mco-pay-btn';
       btn.style.display = 'block';
