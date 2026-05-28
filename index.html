@@ -535,10 +535,10 @@ footer{border-top:1px solid var(--border);padding:40px 3rem;display:flex;justify
     <p class="lead">Une question ? Écrivez-nous.</p>
     <div class="contact-grid">
       <div>
-        <div class="c-field"><label>Nom</label><input type="text" placeholder="Votre nom"></div>
-        <div class="c-field"><label>Email</label><input type="email" placeholder="votre@email.com"></div>
-        <div class="c-field"><label>Message</label><textarea placeholder="Votre message..."></textarea></div>
-        <button class="btn-send">Envoyer</button>
+        <div class="c-field"><label>Nom</label><input type="text" id="c-name" placeholder="Votre nom"></div>
+        <div class="c-field"><label>Email</label><input type="email" id="c-email" placeholder="votre@email.com"></div>
+        <div class="c-field"><label>Message</label><textarea id="c-msg" placeholder="Votre message..."></textarea></div>
+        <button class="btn-send" onclick="sendContact()">Envoyer</button>
       </div>
       <div class="c-info">
         <p><strong>Email</strong><br>contact@senteursdesalpes.com</p><br>
@@ -1010,6 +1010,14 @@ function toast(msg){
 
 
 // ── CHECKOUT ──
+
+function sendContact() {
+  var n = document.getElementById('c-name').value;
+  var e = document.getElementById('c-email').value;
+  var m = document.getElementById('c-msg').value;
+  if (n == '' || e == '' || m == '') { toast('Veuillez remplir tous les champs'); return; }
+  fetch('https://formspree.io/f/xlgvzjpr', {method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({name:n,email:e,message:m})}).then(function(r){return r.json();}).then(function(d){if(d.ok){toast('Message envoye !');document.getElementById('c-name').value='';document.getElementById('c-email').value='';document.getElementById('c-msg').value='';}else{toast('Erreur.');}}).catch(function(){toast('Erreur.');});
+}
 function goToCheckout() {
   var stripeLinks = {"Coeur Blanc":"https://buy.stripe.com/28E9AS57u01x9lw0c4eQM05","Rosa Vento":"https://buy.stripe.com/8x27sK6by5lRbtE6AseQM04","In Senso":"https://buy.stripe.com/fZu8wO7fCaGb1T4f6YeQM03","Bianco Latte":"https://buy.stripe.com/28EcN4bvS01x41cbUMeQM02","Coeur Blanc + Rosa Vento":"https://buy.stripe.com/8x2aEW9nK6pVbtE5woeQM01","Rosa Vento + Coeur Blanc":"https://buy.stripe.com/8x2aEW9nK6pVbtE5woeQM01","Vanilla Powder":"https://buy.stripe.com/3cIcN40Re8y3cxI2kceQM00"};
   products.forEach(function(p){ if (!p.stripeLink && stripeLinks[p.name]) p.stripeLink = stripeLinks[p.name]; });
